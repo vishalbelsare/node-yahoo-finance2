@@ -6,22 +6,27 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol for which insights are provided"
         },
         "instrumentInfo": {
-          "$ref": "#/definitions/InsightsInstrumentInfo"
+          "$ref": "#/definitions/InsightsInstrumentInfo",
+          "description": "Basic instrument information"
         },
         "companySnapshot": {
-          "$ref": "#/definitions/InsightsCompanySnapshot"
+          "$ref": "#/definitions/InsightsCompanySnapshot",
+          "description": "Company snapshot information"
         },
         "recommendation": {
           "type": "object",
           "properties": {
             "targetPrice": {
-              "type": "number"
+              "type": "number",
+              "description": "Target price from analysts"
             },
             "provider": {
-              "type": "string"
+              "type": "string",
+              "description": "Research provider"
             },
             "rating": {
               "type": "string",
@@ -29,35 +34,41 @@
                 "BUY",
                 "SELL",
                 "HOLD"
-              ]
+              ],
+              "description": "Overall rating recommendation"
             }
           },
           "required": [
             "provider",
             "rating"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "description": "Current analyst recommendation"
         },
         "events": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/InsightsEvent"
-          }
+          },
+          "description": "Upcoming events"
         },
         "reports": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/InsightsReport"
-          }
+          },
+          "description": "Research reports"
         },
         "sigDevs": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/InsightsSigDev"
-          }
+          },
+          "description": "Significant developments"
         },
         "upsell": {
-          "$ref": "#/definitions/InsightsUpsell"
+          "$ref": "#/definitions/InsightsUpsell",
+          "description": "Upsell information"
         },
         "upsellSearchDD": {
           "type": "object",
@@ -69,20 +80,23 @@
           "required": [
             "researchReports"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "description": "Additional research reports"
         },
         "secReports": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/InsightsSecReport"
-          }
+          },
+          "description": "SEC filing reports"
         }
       },
       "required": [
         "symbol",
         "sigDevs"
       ],
-      "additionalProperties": {}
+      "additionalProperties": {},
+      "description": "Complete insights result for a financial instrument."
     },
     "InsightsInstrumentInfo": {
       "type": "object",
@@ -391,18 +405,21 @@
       "type": "object",
       "properties": {
         "headline": {
-          "type": "string"
+          "type": "string",
+          "description": "Headline of the development"
         },
         "date": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of the development"
         }
       },
       "required": [
         "headline",
         "date"
       ],
-      "additionalProperties": {}
+      "additionalProperties": {},
+      "description": "Significant development item."
     },
     "InsightsUpsell": {
       "type": "object",
@@ -512,31 +529,38 @@
       "type": "object",
       "properties": {
         "lang": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for results (e.g., \"en-US\")"
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code for results (e.g., \"US\")"
         },
         "reportsCount": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of research reports to include"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Configuration options for insights requests."
     },
-    "NamedParameters<typeof trendingSymbols>": {
+    "NamedParameters<typeof insights>": {
       "type": "object",
       "properties": {
         "this": {
           "$ref": "#/definitions/ModuleThis"
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "- Stock symbol to get insights for.   Use search() to find valid symbols."
         },
         "queryOptionsOverrides": {
-          "$ref": "#/definitions/InsightsOptions"
+          "$ref": "#/definitions/InsightsOptions",
+          "description": "- Optional configuration:   - `reportsCount`: Number of research reports (default: 2)   - `region`: Market region (default: \"US\")   - `lang`: Language for results (default: \"en-US\")"
         },
         "moduleOptions": {
-          "$ref": "#/definitions/ModuleOptions"
+          "$ref": "#/definitions/ModuleOptions",
+          "description": "- Optional module configuration (validateResult, etc.)"
         }
       },
       "required": [
@@ -571,6 +595,10 @@
             "string"
           ],
           "description": "Filename to use for cached result"
+        },
+        "fetch": {
+          "$comment": "(input: RequestInfo | URL, init?: RequestInit) ->  Promise<Response>",
+          "description": "An alternative fetch function to use just for this call"
         }
       },
       "additionalProperties": false

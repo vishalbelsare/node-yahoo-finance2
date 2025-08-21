@@ -23,15 +23,15 @@ describe("search", () => {
       "NO0010123060", // has no shortname! (#31)
       "EUR", // a currency
       "BJ0CDD2", // additionalProperty: { exchDisp: "London" }
-      'RAMXX', // a money market
+      "RAMXX", // a money market
     ],
   });
 
   // validate different searches
   it.each(testSearches)(
     "passed validation for search '%s'",
-    async (testSearch) => {
-      const devel = `search-${testSearch}.json`;
+    async (testSearch, t, onFinish) => {
+      const devel = { id: `search-${testSearch}`, t, onFinish };
       await yf.search(testSearch, {}, { devel });
     },
   );

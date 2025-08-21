@@ -23,7 +23,7 @@ export default {
     ["@semantic-release/npm", {
       pkgRoot: "npm",
     }],
-    // "@sebbo2002/semantic-release-jsr",
+    "@sebbo2002/semantic-release-jsr",
     "@semantic-release/github",
   ],
   preset: "conventionalcommits",

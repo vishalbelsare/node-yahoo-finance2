@@ -1,3 +1,89 @@
+/**
+ * Analyst insights, research reports, and company analysis.
+ *
+ * The module retrieves comprehensive analyst coverage including recommendations,
+ * research reports, significant developments, and company analysis scores.
+ *
+ * @example Basic Usage
+ * ```typescript
+ * import YahooFinance from "yahoo-finance2";
+ * const yahooFinance = new YahooFinance();
+ *
+ * // Get insights for a symbol
+ * const insights = await yahooFinance.insights('AAPL');
+ * console.log(insights.recommendation); // { rating: "BUY", targetPrice: 200, ... }
+ * console.log(insights.sigDevs[0]); // Recent significant development
+ * ```
+ *
+ * @example Working with Reports
+ * ```typescript
+ * const insights = await yahooFinance.insights('TSLA');
+ *
+ * // Browse research reports
+ * insights.reports?.forEach(report => {
+ *   console.log(`${report.reportTitle} by ${report.provider}`);
+ *   console.log(`Date: ${report.reportDate}`);
+ * });
+ *
+ * // Check significant developments
+ * insights.sigDevs.forEach(dev => {
+ *   console.log(`${dev.date}: ${dev.headline}`);
+ * });
+ * ```
+ *
+ * @example Research Reports
+ * ```typescript
+ * const insights = await yahooFinance.insights('TSLA', {
+ *   reportsCount: 5
+ * });
+ *
+ * // Browse research reports
+ * insights.reports?.forEach(report => {
+ *   console.log(`${report.reportTitle} - ${report.provider}`);
+ *   console.log(`Published: ${report.reportDate}`);
+ *   console.log(`Rating: ${report.investmentRating}`);
+ *   if (report.targetPrice) {
+ *     console.log(`Target: $${report.targetPrice}`);
+ *   }
+ * });
+ * ```
+ *
+ * @example Company Analysis
+ * ```typescript
+ * const insights = await yahooFinance.insights('MSFT');
+ *
+ * // Company performance vs sector
+ * if (insights.companySnapshot) {
+ *   const company = insights.companySnapshot.company;
+ *   const sector = insights.companySnapshot.sector;
+ *
+ *   console.log('Company vs Sector Scores:');
+ *   console.log(`Innovation: ${company.innovativeness} vs ${sector.innovativeness}`);
+ *   console.log(`Hiring: ${company.hiring} vs ${sector.hiring}`);
+ *   console.log(`Sustainability: ${company.sustainability} vs ${sector.sustainability}`);
+ * }
+ * ```
+ *
+ * @remarks
+ * **Data Availability**: Insights data varies significantly by symbol.
+ * Popular large-cap stocks typically have the most comprehensive coverage.
+ *
+ * **Premium Content**: Some research reports and detailed analysis may
+ * require premium subscriptions or additional access rights.
+ *
+ * **Timeliness**: Recommendations and reports reflect the most recent
+ * analyst coverage but may not include the very latest market developments.
+ *
+ * @see {@link InsightsOptions} for all available options
+ * @see {@link InsightsResult} for complete result structure
+ *
+ * @remarks
+ * **Data Availability**: Insights data availability varies by symbol.
+ * Premium content may require additional subscriptions.
+ *
+ * @module insights
+ */
+
 import type {
   ModuleOptions,
   ModuleOptionsWithValidateFalse,
@@ -13,29 +99,62 @@ import { getTypedDefinitions } from "../lib/validate/index.ts";
 import schema from "./insights.schema.json" with { type: "json" };
 const definitions = getTypedDefinitions(schema);
 
+/**
+ * Complete insights result for a financial instrument.
+ */
 export interface InsightsResult {
   [key: string]: unknown;
+
+  /** Symbol for which insights are provided */
   symbol: string;
+
+  /** Basic instrument information */
   instrumentInfo?: InsightsInstrumentInfo;
+
+  /** Company snapshot information */
   companySnapshot?: InsightsCompanySnapshot;
+
+  /** Current analyst recommendation */
   recommendation?: {
+    /** Target price from analysts */
     targetPrice?: number;
+    /** Research provider */
     provider: string;
+    /** Overall rating recommendation */
     rating: "BUY" | "SELL" | "HOLD";
   };
+
+  /** Upcoming events */
   events?: InsightsEvent[];
+
+  /** Research reports */
   reports?: InsightsReport[];
+
+  /** Significant developments */
   sigDevs: InsightsSigDev[];
+
+  /** Upsell information */
   upsell?: InsightsUpsell;
+
+  /** Additional research reports */
   upsellSearchDD?: {
     researchReports: InsightsResearchReport;
   };
+
+  /** SEC filing reports */
   secReports?: InsightsSecReport[];
 }
 
+/**
+ * Significant development item.
+ */
 export interface InsightsSigDev {
   [key: string]: unknown;
+
+  /** Headline of the development */
   headline: string;
+
+  /** Date of the development */
   date: Date;
 }
 
@@ -159,9 +278,17 @@ export interface InsightsUpsell {
   upsellReportType?: string;
 }
 
+/**
+ * Configuration options for insights requests.
+ */
 export interface InsightsOptions {
+  /** Language code for results (e.g., "en-US") */
   lang?: string;
+
+  /** Region code for results (e.g., "US") */
   region?: string;
+
+  /** Number of research reports to include */
   reportsCount?: number;
 }
 
@@ -172,21 +299,65 @@ const queryOptionsDefaults = {
   reportsCount: 2,
 };
 
-export default function trendingSymbols(
+/**
+ * Get insights with validation enabled.
+ *
+ * **See the {@link [modules/insights] insights module} docs for examples and more.**
+ * @see {@link [modules/insights] insights module} docs for examples and more.
+ *
+ * @param symbol - Stock symbol to get insights for.
+ *
+ * @throws Will throw an error if:
+ *         - Network request fails
+ *         - Invalid symbol
+ *         - Validation fails (if enabled)
+ */
+export default function insights(
   this: ModuleThis,
   symbol: string,
   queryOptionsOverrides?: InsightsOptions,
   moduleOptions?: ModuleOptionsWithValidateTrue,
 ): Promise<InsightsResult>;
 
-export default function trendingSymbols(
+/**
+ * Get insights with validation disabled.
+ *
+ * **See the {@link [modules/insights] insights module} docs for examples and more.**
+ * @see {@link [modules/insights] insights module} docs for examples and more.
+ *
+ * @param symbol - Stock symbol to get insights for.
+ * @param queryOptionsOverrides - Optional configuration for language, region, and report count.
+ * @param moduleOptions - Module configuration with validateResult: false
+ * @returns Promise resolving to unvalidated raw data, but that should resemble {@linkcode InsightsResult}.
+ */
+export default function insights(
   this: ModuleThis,
   symbol: string,
   queryOptionsOverrides?: InsightsOptions,
   moduleOptions?: ModuleOptionsWithValidateFalse,
 ): Promise<unknown>;
 
-export default function trendingSymbols(
+/*
+ * @param symbol - Stock symbol to get insights for.  Use search() to find valid symbols.
+ * @param queryOptionsOverrides - Optional configuration:
+ *                                - `reportsCount`: Number of research reports (default: 2)
+ *                                - `region`: Market region (default: "US")
+ *                                - `lang`: Language for results (default: "en-US")
+ * @param moduleOptions - Optional module configuration (validateResult, etc.)
+ *
+ * @returns Promise that resolves to an InsightsResult containing:
+ *          - `recommendation`: Current analyst recommendation and target price
+ *          - `sigDevs`: Array of significant developments and news
+ *          - `reports`: Array of research reports with ratings and analysis
+ *          - `companySnapshot`: Company performance scores vs sector/market
+ *          - `events`: Upcoming events and earnings
+ *
+ * @throws Will throw an error if:
+ *         - Network request fails
+ *         - Invalid symbol
+ *         - Validation fails (if enabled)
+ */
+export default function insights(
   this: ModuleThis,
   symbol: string,
   queryOptionsOverrides?: InsightsOptions,

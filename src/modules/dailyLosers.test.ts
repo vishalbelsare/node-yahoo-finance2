@@ -1,21 +1,16 @@
-import {
-  createTestYahooFinance,
-  describe,
-  expect,
-  it,
-  setupCache,
-} from "../../tests/common.ts";
-
+import { describe, expect, it } from "../../tests/common.ts";
 import dailyLosers from "./dailyLosers.ts";
 
-const YahooFinance = createTestYahooFinance({ modules: { dailyLosers } });
-const yf = new YahooFinance();
+describe("dayLosers", () => {
+  it("dailyLosers always throws deprecation error", () => {
+    expect(() => dailyLosers()).toThrow(
+      "dailyLosers module has been deprecated",
+    );
+  });
 
-describe("dailyLosers", () => {
-  setupCache();
-
-  it("returns expected result", () => {
-    const devel = "dailyLosers.json";
-    return expect(yf.dailyLosers({}, { devel })).resolves.toBeDefined();
+  it("dailyLosers error suggests screener migration", () => {
+    expect(() => dailyLosers()).toThrow(
+      "screener({ scrIds: 'day_losers' })",
+    );
   });
 });

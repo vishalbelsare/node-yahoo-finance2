@@ -1,8 +1,8 @@
 import {
   createTestYahooFinance,
   describe,
+  expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
 } from "../../tests/common.ts";
 
@@ -16,21 +16,17 @@ describe("trendingSymbols", () => {
 
   it.each(["US", "GB", "IT", "AU"])(
     "passes validation for country '%s'",
-    async (country) => {
+    async (country, t, onFinish) => {
       await yf.trendingSymbols(country, undefined, {
-        devel: `trendingSymbols-${country}.json`,
+        devel: { id: `trendingSymbols-${country}`, t, onFinish },
       });
     },
   );
 
-  /* TODO
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on weird result", () => {
-      const devel = "weirdJsonResult.fake.json";
-      return expect(yf.trendingSymbols("GB", {}, { devel })).rejects.toThrow(
-        /^Unexpected result/,
-      );
-    });
-  }
-  */
+  it("throws on weird result", (t, onFinish) => {
+    const devel = { id: "weirdJsonResult.fake", t, onFinish };
+    return expect(yf.trendingSymbols("GB", {}, { devel })).rejects.toThrow(
+      /^Unexpected result/,
+    );
+  });
 });

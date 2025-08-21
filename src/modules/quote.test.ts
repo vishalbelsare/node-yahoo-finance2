@@ -3,7 +3,6 @@ import {
   describe,
   expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
@@ -50,8 +49,8 @@ describe("quote", () => {
   */
 
   describe("passes validation", () => {
-    it.each(symbols)("for symbol '%s'", async (symbol) => {
-      const devel = `quote-${symbol}.json`;
+    it.each(symbols)("for symbol '%s'", async (symbol, t, onFinish) => {
+      const devel = { id: `quote-${symbol}`, t, onFinish };
       await yf.quote(symbol, {}, { devel });
     });
 
@@ -65,48 +64,45 @@ describe("quote", () => {
     */
   });
 
-  it("allows blank options", async () => {
-    await expect(() =>
-      yf.quote("AAPL", undefined, { devel: "quote-AAPL.json" })
-    ).not.toThrow();
+  it("allows blank options", async (t, onFinish) => {
+    await expect(() => {
+      const devel = { id: "quote-AAPL", t, onFinish };
+      yf.quote("AAPL", undefined, { devel });
+    }).not.toThrow();
   });
 
-  it("returns an array for an array", async () => {
-    const devel = "quote-AAPL-BABA.json";
+  it("returns an array for an array", async (t, onFinish) => {
+    const devel = { id: "quote-AAPL-BABA", t, onFinish };
     const results = await yf.quote(["AAPL", "BABA"], {}, { devel });
     expect(results.length).toBe(2);
     expect(results[0].symbol).toBe("AAPL");
     expect(results[1].symbol).toBe("BABA");
   });
 
-  it("returns single for a string", async () => {
-    const devel = "quote-AAPL.json";
+  it("returns single for a string", async (t, onFinish) => {
+    const devel = { id: "quote-AAPL", t, onFinish };
     const result = await yf.quote("AAPL", {}, { devel });
     expect(Array.isArray(result)).toBe(false);
     expect(result.symbol).toBe("AAPL");
   });
 
-  /// XXX TODO
-  /*
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on unexpected result", async () => {
-      await expect(
-        yf.quote("AAPL", {}, { devel: "weirdJsonResult.fake.json" }),
-      ).rejects.toThrow(/Unexpected result/);
-    });
-  }
-  */
+  it("throws on unexpected result", async (t, onFinish) => {
+    const devel = { id: "weirdJsonResult.fake", t, onFinish };
+    await expect(
+      yf.quote("AAPL", {}, { devel }),
+    ).rejects.toThrow(/Unexpected result/);
+  });
 
-  it("passes through single ?fields", async () => {
-    const devel = "quote-TSLA-fields-symbol.json";
+  it("passes through single ?fields", async (t, onFinish) => {
+    const devel = { id: "quote-TSLA-fields-symbol", t, onFinish };
     const queryOpts = { fields: ["symbol"] };
     const result = await yf.quote("TSLA", queryOpts, { devel });
     expect(result.symbol).toBe("TSLA");
     expect(result.displayName).not.toBeDefined();
   });
 
-  it("passes through multiple ?fields", async () => {
-    const devel = "quote-TSLA-fields-symbol-shortName.json";
+  it("passes through multiple ?fields", async (t, onFinish) => {
+    const devel = { id: "quote-TSLA-fields-symbol-shortName", t, onFinish };
     const queryOpts = { fields: ["symbol", "displayName"] };
     const result = await yf.quote("TSLA", queryOpts, { devel });
     expect(result.symbol).toBe("TSLA");
@@ -114,8 +110,8 @@ describe("quote", () => {
   });
 
   describe("return type", () => {
-    it("array", async () => {
-      const devel = "quote-AAPL-BABA.json";
+    it("array", async (t, onFinish) => {
+      const devel = { id: "quote-AAPL-BABA", t, onFinish };
       const results = await yf.quote(
         ["AAPL", "BABA"],
         { return: "array" },
@@ -126,8 +122,8 @@ describe("quote", () => {
       expect(results[1].symbol).toBe("BABA");
     });
 
-    it("object", async () => {
-      const devel = "quote-AAPL-BABA.json";
+    it("object", async (t, onFinish) => {
+      const devel = { id: "quote-AAPL-BABA", t, onFinish };
       const results = await yf.quote(
         ["AAPL", "BABA"],
         { return: "object" },
@@ -138,8 +134,8 @@ describe("quote", () => {
       expect(results.BABA.symbol).toBe("BABA");
     });
 
-    it("map", async () => {
-      const devel = "quote-AAPL-BABA.json";
+    it("map", async (t, onFinish) => {
+      const devel = { id: "quote-AAPL-BABA", t, onFinish };
       const results = await yf.quote(
         ["AAPL", "BABA"],
         { return: "map" },
@@ -152,14 +148,15 @@ describe("quote", () => {
   });
 
   describe('{ quoteType: "NONE" }', () => {
-    it("returns undefined on single result", async () => {
-      const result = await yf.quote("BRKS", {}, { devel: "quote-BRKS.json" });
+    it("returns undefined on single result", async (t, onFinish) => {
+      const devel = { id: "quote-BRKS", t, onFinish };
+      const result = await yf.quote("BRKS", {}, { devel });
       expect(result).toBe(undefined);
     });
   });
 
-  it("passes through beta field option", async () => {
-    const devel = "quote-MSFT-fields-beta.json";
+  it("passes through beta field option", async (t, onFinish) => {
+    const devel = { id: "quote-MSFT-fields-beta", t, onFinish };
     const queryOpts = { fields: ["beta"] };
     const result = await yf.quote("MSFT", queryOpts, { devel });
     expect(result.symbol).toBe("MSFT");

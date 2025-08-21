@@ -1,20 +1,6 @@
-/*
- * moduleExec(options: ModuleExecOptions)
- *
- * 1. Query Stage
- *   1. Validate user-supplied module params, e.g. { period: '1d' }
- *   2. Merge query params: (module defaults, user-supplied overrides, etc)
- *   3. Optionally transform query params
- *
- * 2. Call lib/yahooFinanceFetch
- *
- * 3. Result Stage
- *   1. Optional transform the result
- *   2. Validate the result and coerce types
- *
- * Further info below, inline.
+/**
+ * @module moduleExec
  */
-
 import validateAndCoerceTypes, {
   disallowAdditionalProps,
 } from "./validateAndCoerceTypes.ts";
@@ -114,7 +100,30 @@ interface ModuleExecOptions {
 // deno-lint-ignore no-explicit-any
 type ThisWithModExec = { [key: string]: any; _moduleExec: typeof moduleExec };
 
-async function moduleExec(this: ThisWithModExec, opts: ModuleExecOptions) {
+/**
+ * Executes a module with the given options.
+ *
+ * 1. **Query Stage**
+ *     1. Validate user-supplied module params, e.g. { period: '1d' }
+ *     1. Merge query params: (module defaults, user-supplied overrides, etc)
+ *     1. Call `transformWith` func if provided.
+ *
+ * 1. Call `lib/yahooFinanceFetch.ts` with the above.
+ *
+ * 1. **Result Stage**
+ *     1. Call `transformWith` func if provided.
+ *     1. Validate the result and coerce types.
+ *
+ * @param this - The context of the module execution.
+ * @param opts - The options for the module execution.
+ * @returns A promise that resolves to the result of the module execution.
+ *   It will be validated according to the requested schema but the calling
+ *   module should cast to the correct type.
+ */
+async function moduleExec(
+  this: ThisWithModExec,
+  opts: ModuleExecOptions,
+): Promise<unknown> {
   const queryOpts = opts.query;
   const moduleOpts = opts.moduleOptions;
   const moduleName = opts.moduleName;
@@ -240,9 +249,7 @@ async function moduleExec(this: ThisWithModExec, opts: ModuleExecOptions) {
     if (validateResult) throw error;
   }
 
-  // XXX TODO unknown shoudl be ok
-  // deno-lint-ignore no-explicit-any
-  return result as any;
+  return result as unknown;
 }
 
 export default moduleExec;

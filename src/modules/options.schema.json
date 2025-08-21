@@ -80,35 +80,44 @@
         {
           "$ref": "#/definitions/QuoteMoneyMarket"
         }
-      ]
+      ],
+      "description": "Union type for all possible quote data structures.\n\nThe actual interface returned depends on the `quoteType` field:\n- `\"EQUITY\"` → QuoteEquity\n- `\"ETF\"` → QuoteEtf\n- `\"CRYPTOCURRENCY\"` → QuoteCryptoCurrency\n- `\"OPTION\"` → QuoteOption\n- `\"MUTUALFUND\"` → QuoteMutualfund\n- `\"CURRENCY\"` → QuoteCurrency\n- `\"FUTURE\"` → QuoteFuture\n- `\"INDEX\"` → QuoteIndex\n- `\"MONEYMARKET\"` → QuoteMoneyMarket"
     },
     "QuoteCryptoCurrency": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "CRYPTOCURRENCY"
+          "const": "CRYPTOCURRENCY",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -119,321 +128,422 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "circulatingSupply": {
-          "type": "number"
+          "type": "number",
+          "description": "Current circulating supply of the cryptocurrency"
         },
         "fromCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Base currency symbol, e.g., 'BTC'"
         },
         "toCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Quote currency symbol, e.g., 'USD=X'"
         },
         "lastMarket": {
-          "type": "string"
+          "type": "string",
+          "description": "Last market data source, e.g., 'CoinMarketCap'"
         },
         "coinImageUrl": {
-          "type": "string"
+          "type": "string",
+          "description": "URL to coin image/logo"
         },
         "volume24Hr": {
-          "type": "number"
+          "type": "number",
+          "description": "24-hour trading volume"
         },
         "volumeAllCurrencies": {
-          "type": "number"
+          "type": "number",
+          "description": "Volume across all currencies"
         },
         "startDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Start date for this cryptocurrency"
         },
         "coinMarketCapLink": {
-          "type": "string"
+          "type": "string",
+          "description": "Link to CoinMarketCap page"
         },
         "logoUrl": {
-          "type": "string"
+          "type": "string",
+          "description": "URL to logo image"
         }
       },
       "required": [
@@ -453,34 +563,43 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "Cryptocurrency quote data with specific fields for digital assets."
     },
     "QuoteBase": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
-          "type": "string"
+          "type": "string",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -491,290 +610,381 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         }
       },
       "required": [
@@ -794,7 +1004,8 @@
         "exchangeDataDelayedBy",
         "fullExchangeName",
         "symbol"
-      ]
+      ],
+      "description": "Base interface for all quote data containing common fields across all asset types.\n\nThis interface includes essential information that appears for all financial instruments, including stocks, ETFs, options, cryptocurrencies, etc."
     },
     "TwoNumberRange": {
       "type": "object",
@@ -820,29 +1031,37 @@
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "CURRENCY"
+          "const": "CURRENCY",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -853,290 +1072,381 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         }
       },
       "required": [
@@ -1156,35 +1466,44 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "Currency quote data for forex pairs."
     },
     "QuoteEtf": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "ETF"
+          "const": "ETF",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -1195,299 +1514,393 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "dividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Annual dividend yield percentage"
         },
         "netAssets": {
-          "type": "number"
+          "type": "number",
+          "description": "Total net assets under management"
         },
         "netExpenseRatio": {
-          "type": "number"
+          "type": "number",
+          "description": "Net expense ratio percentage"
         }
       },
       "required": [
@@ -1507,35 +1920,44 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "ETF (Exchange-Traded Fund) quote data with fund-specific metrics."
     },
     "QuoteEquity": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "EQUITY"
+          "const": "EQUITY",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -1546,296 +1968,389 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "dividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Annual dividend rate per share"
         },
         "dividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Annual dividend yield percentage"
         }
       },
       "required": [
@@ -1855,35 +2370,44 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "Stock/equity quote data with company-specific metrics."
     },
     "QuoteFuture": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "FUTURE"
+          "const": "FUTURE",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -1894,307 +2418,403 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "headSymbolAsString": {
-          "type": "string"
+          "type": "string",
+          "description": "Head symbol as string identifier"
         },
         "contractSymbol": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether this is a contract symbol"
         },
         "underlyingExchangeSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying exchange symbol"
         },
         "expireDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Contract expiration date"
         },
         "expireIsoDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "ISO formatted expiration date"
         }
       },
       "required": [
@@ -2218,35 +2838,44 @@
         "tradeable",
         "triggerable",
         "underlyingExchangeSymbol"
-      ]
+      ],
+      "description": "Futures contract quote data."
     },
     "QuoteIndex": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "INDEX"
+          "const": "INDEX",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -2257,290 +2886,381 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         }
       },
       "required": [
@@ -2560,35 +3280,44 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "Market index quote data."
     },
     "QuoteMutualfund": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "MUTUALFUND"
+          "const": "MUTUALFUND",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -2599,296 +3328,389 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available (typically false for mutual funds)"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "dividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Annual dividend rate per share"
         },
         "dividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Annual dividend yield percentage"
         }
       },
       "required": [
@@ -2908,35 +3730,44 @@
         "symbol",
         "tradeable",
         "triggerable"
-      ]
+      ],
+      "description": "Mutual fund quote data."
     },
     "QuoteOption": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "OPTION"
+          "const": "OPTION",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -2947,300 +3778,394 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol of the underlying asset"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (number of open contracts)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "strike": {
-          "type": "number"
+          "type": "number",
+          "description": "Strike price of the option"
         },
         "expireDate": {
-          "type": "number"
+          "type": "number",
+          "description": "Expiration date as timestamp"
         },
         "expireIsoDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "ISO formatted expiration date"
         }
       },
       "required": [
@@ -3265,36 +4190,45 @@
         "tradeable",
         "triggerable",
         "underlyingSymbol"
-      ]
+      ],
+      "description": "Options contract quote data with options-specific fields."
     },
     "QuoteMoneyMarket": {
       "type": "object",
       "properties": {
         "language": {
-          "type": "string"
+          "type": "string",
+          "description": "Language code for the quote data, e.g., \"en-US\""
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region code, e.g., \"US\""
         },
         "quoteType": {
           "type": "string",
-          "const": "MONEYMARKET"
+          "const": "MONEYMARKET",
+          "description": "Type of financial instrument: \"EQUITY\", \"ETF\", \"MUTUALFUND\", \"CRYPTOCURRENCY\", etc."
         },
         "typeDisp": {
           "type": "string",
-          "const": "MoneyMarket"
+          "const": "MoneyMarket",
+          "description": "Display name for the quote type, e.g., \"Equity\" (not always present)"
         },
         "quoteSourceName": {
-          "type": "string"
+          "type": "string",
+          "description": "Source of the quote data, e.g., \"Delayed Quote\", \"Nasdaq Real Time Price\""
         },
         "triggerable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether price alerts can be triggered for this symbol"
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency code, e.g., \"USD\""
         },
         "customPriceAlertConfidence": {
-          "type": "string"
+          "type": "string",
+          "description": "Price alert confidence level (appears/disappears based on network load)"
         },
         "marketState": {
           "type": "string",
@@ -3305,293 +4239,385 @@
             "PREPRE",
             "POST",
             "POSTPOST"
-          ]
+          ],
+          "description": "Current market state for this symbol"
         },
         "tradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the symbol is currently tradeable"
         },
         "cryptoTradeable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether cryptocurrency trading is available for this symbol"
         },
         "corporateActions": {
           "type": "array",
-          "items": {}
+          "items": {},
+          "description": "Corporate actions data (structure TBD)"
         },
         "exchange": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange code where the symbol is traded, e.g., \"NMS\""
         },
         "shortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Short name/ticker display name, e.g., \"NVIDIA Corporation\""
         },
         "longName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full company/instrument name, e.g., \"NVIDIA Corporation\""
         },
         "messageBoardId": {
-          "type": "string"
+          "type": "string",
+          "description": "Yahoo Finance message board identifier"
         },
         "exchangeTimezoneName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone name, e.g., \"America/New_York\""
         },
         "exchangeTimezoneShortName": {
-          "type": "string"
+          "type": "string",
+          "description": "Exchange timezone abbreviation, e.g., \"EST\", \"EDT\""
         },
         "gmtOffSetMilliseconds": {
-          "type": "number"
+          "type": "number",
+          "description": "GMT offset in milliseconds"
         },
         "market": {
-          "type": "string"
+          "type": "string",
+          "description": "Market identifier, e.g., \"us_market\""
         },
         "esgPopulated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether ESG (Environmental, Social, Governance) data is available"
         },
         "fiftyTwoWeekLowChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week low"
         },
         "fiftyTwoWeekLowChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week low"
         },
         "fiftyTwoWeekRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "52-week trading range with low and high values"
         },
         "fiftyTwoWeekHighChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 52-week high"
         },
         "fiftyTwoWeekHighChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 52-week high"
         },
         "fiftyTwoWeekLow": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week low price"
         },
         "fiftyTwoWeekHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week high price"
         },
         "fiftyTwoWeekChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "52-week percentage change"
         },
         "dividendDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of last dividend payment"
         },
         "earningsTimestamp": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings announcement timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period start timestamp (may be inaccurate ±2 days)"
         },
         "earningsTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings period end timestamp (may be inaccurate ±2 days)"
         },
         "earningsCallTimestampStart": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call start timestamp"
         },
         "earningsCallTimestampEnd": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Earnings call end timestamp"
         },
         "isEarningsDateEstimate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether earnings date is estimated"
         },
         "trailingAnnualDividendRate": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month annual dividend rate"
         },
         "trailingPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing price-to-earnings ratio"
         },
         "trailingAnnualDividendYield": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 12-month dividend yield percentage"
         },
         "epsTrailingTwelveMonths": {
-          "type": "number"
+          "type": "number",
+          "description": "Earnings per share over trailing 12 months"
         },
         "epsForward": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward-looking earnings per share estimate"
         },
         "epsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Current year earnings per share estimate"
         },
         "priceEpsCurrentYear": {
-          "type": "number"
+          "type": "number",
+          "description": "Price to current year EPS ratio"
         },
         "sharesOutstanding": {
-          "type": "number"
+          "type": "number",
+          "description": "Number of shares outstanding"
         },
         "bookValue": {
-          "type": "number"
+          "type": "number",
+          "description": "Book value per share"
         },
         "fiftyDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "50-day moving average price"
         },
         "fiftyDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 50-day average"
         },
         "fiftyDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 50-day average"
         },
         "twoHundredDayAverage": {
-          "type": "number"
+          "type": "number",
+          "description": "200-day moving average price"
         },
         "twoHundredDayAverageChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Change from 200-day average"
         },
         "twoHundredDayAverageChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Percentage change from 200-day average"
         },
         "marketCap": {
-          "type": "number"
+          "type": "number",
+          "description": "Market capitalization"
         },
         "forwardPE": {
-          "type": "number"
+          "type": "number",
+          "description": "Forward price-to-earnings ratio"
         },
         "priceToBook": {
-          "type": "number"
+          "type": "number",
+          "description": "Price-to-book ratio"
         },
         "sourceInterval": {
-          "type": "number"
+          "type": "number",
+          "description": "Data source update interval in minutes"
         },
         "exchangeDataDelayedBy": {
-          "type": "number"
+          "type": "number",
+          "description": "Exchange data delay in minutes"
         },
         "firstTradeDateMilliseconds": {
-          "$ref": "#/definitions/DateInMs"
+          "$ref": "#/definitions/DateInMs",
+          "description": "First trade date in milliseconds since epoch (converted to Date)"
         },
         "priceHint": {
-          "type": "number"
+          "type": "number",
+          "description": "Price precision hint for display purposes"
         },
         "postMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change percentage"
         },
         "postMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "After-hours market timestamp"
         },
         "postMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours market price"
         },
         "postMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "After-hours price change"
         },
         "hasPrePostMarketData": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether pre/post market data is available"
         },
         "regularMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change"
         },
         "regularMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session price change percentage"
         },
         "regularMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Regular market session timestamp"
         },
         "regularMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session current/last price"
         },
         "regularMarketDayHigh": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day high"
         },
         "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
+          "$ref": "#/definitions/TwoNumberRange",
+          "description": "Regular market session day range with low and high"
         },
         "regularMarketDayLow": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session day low"
         },
         "regularMarketVolume": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session volume"
         },
         "regularMarketPreviousClose": {
-          "type": "number"
+          "type": "number",
+          "description": "Previous day's closing price"
         },
         "preMarketChange": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change"
         },
         "preMarketChangePercent": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price change percentage"
         },
         "preMarketTime": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Pre-market timestamp"
         },
         "preMarketPrice": {
-          "type": "number"
+          "type": "number",
+          "description": "Pre-market price"
         },
         "bid": {
-          "type": "number"
+          "type": "number",
+          "description": "Current bid price"
         },
         "ask": {
-          "type": "number"
+          "type": "number",
+          "description": "Current ask price"
         },
         "bidSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current bid"
         },
         "askSize": {
-          "type": "number"
+          "type": "number",
+          "description": "Size of current ask"
         },
         "fullExchangeName": {
-          "type": "string"
+          "type": "string",
+          "description": "Full exchange name, e.g., \"NasdaqGS\""
         },
         "financialCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "Currency used for financial reporting"
         },
         "regularMarketOpen": {
-          "type": "number"
+          "type": "number",
+          "description": "Regular market session opening price"
         },
         "averageDailyVolume3Month": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 3 months"
         },
         "averageDailyVolume10Day": {
-          "type": "number"
+          "type": "number",
+          "description": "Average daily volume over 10 days"
         },
         "displayName": {
-          "type": "string"
+          "type": "string",
+          "description": "Display name for the symbol, e.g., \"NVIDIA\""
         },
         "symbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Symbol ticker"
         },
         "underlyingSymbol": {
-          "type": "string"
+          "type": "string",
+          "description": "Underlying symbol (for derivatives like options)"
         },
         "ytdReturn": {
-          "type": "number"
+          "type": "number",
+          "description": "Year-to-date return (primarily for ETFs)"
         },
         "trailingThreeMonthReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month returns"
         },
         "trailingThreeMonthNavReturns": {
-          "type": "number"
+          "type": "number",
+          "description": "Trailing 3-month NAV returns"
         },
         "ipoExpectedDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Expected IPO date for upcoming listings"
         },
         "newListingDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "New listing date"
         },
         "nameChangeDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date of name change"
         },
         "prevName": {
-          "type": "string"
+          "type": "string",
+          "description": "Previous name before name change"
         },
         "averageAnalystRating": {
-          "type": "string"
+          "type": "string",
+          "description": "Average analyst rating"
         },
         "pageViewGrowthWeekly": {
-          "type": "number"
+          "type": "number",
+          "description": "Page view growth weekly (since 2021-11-11)"
         },
         "openInterest": {
-          "type": "number"
+          "type": "number",
+          "description": "Open interest (for options)"
         },
         "beta": {
-          "type": "number"
+          "type": "number",
+          "description": "Beta coefficient relative to market"
         },
         "netAssets": {
-          "type": "number"
+          "type": "number",
+          "description": "Total net assets under management"
         }
       },
       "required": [
@@ -3612,7 +4638,8 @@
         "tradeable",
         "triggerable",
         "typeDisp"
-      ]
+      ],
+      "description": "Money market fund quote data."
     },
     "Option": {
       "type": "object",
@@ -3787,6 +4814,10 @@
             "string"
           ],
           "description": "Filename to use for cached result"
+        },
+        "fetch": {
+          "$comment": "(input: RequestInfo | URL, init?: RequestInit) ->  Promise<Response>",
+          "description": "An alternative fetch function to use just for this call"
         }
       },
       "additionalProperties": false

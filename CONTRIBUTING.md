@@ -1,15 +1,57 @@
 # Contributing to yahoo-finance2
 
-## Version 3
+Interesting in helping out? You're the best! This guide will help you get all
+set up with the correct tools and important things to know for the project.
+
+1. [Setup](#setup)
+   1. [Cloning](#cloning)
+   1. [Required Tools](#tools)
+1. [Important Things to Know](#nb)
+   1. [Schema generation](#schema)
+   1. [Testing](#testing)
+   1. [Linting and Formatting](#linting)
+   1. [Documentation](#docs)
+   1. [Committing Changes](#commits)
+1. [Other](#other)
+
+<a name="setup">
+
+## Setup
+
+<a name="cloning"></a>
+
+### Cloning the project
+
+1. Install [git](https://git-scm.com/) if you haven't already.
+1. Change to the directory where you want to keep these files.
+1. `git clone https://github.com/gadicc/node-yahoo-finance2.git`
+1. `cd node-yahoo-finance2`
+
+**Default branch: devel**
+
+All PRs should be submitted against the `devel` branch (github default).
+
+<a name="tools"></a>
+
+### Required Tools: Deno & editor plugins
 
 We use the [deno](https://deno.com/) runtime for development. It can be
 installed with a single command and replaces node, npm, eslint, prettier, tsc;
 is super fast and relieves us of many pain points. The library is still
-published in npm and runs on node and other runties.
+published in npm and runs on node and other runtimes.
 
-### Import things to know
+**vscode:** Make sure you have the official
+[Deno extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
+installed. This includes the language server for super fast typescript, linting,
+formatting, etc, and will use the project settings in `.vscode/settings.json`.
 
-#### Schema Generation
+<a name="nb"></a>
+
+## Import things to know
+
+<a name="schema"></a>
+
+### Schema Generation
 
 To deliver a type-safe experience, we need to validate all input to ensure it
 conforms to what we expect. The single source of truth are the **typescript
@@ -20,7 +62,9 @@ In VSCode, this is done for you automatically. Otherwise, run `deno task schema`
 after changing a file, or `deno task schema --watch` to recompile after file
 changes. This only affects `.ts` files that contain a `@yf-schema` keyword.
 
-##### Testing
+<a name="testing"></a>
+
+### Testing
 
 `deno task test`
 
@@ -30,103 +74,37 @@ follow, in the meantime, just delete the relevant file in `tests/fixtures/http`.
 We use the [fetch-mock-cache](https://www.npmjs.com/package/fetch-mock-cache)
 library for this.
 
-##### Linting, formatting
+Set the environment variable `FETCH_DEVEL=nocache` to force run all network
+tests without the cache. Set `FETCH_DEVEL=recache` to do the same, but also
+rewrite the cache for any failing tests. In both cases, skipped for ids ending
+`.static` or `.fake`, which are fixtures we never want to update because they
+rely on time-sensitive data or made up data, respectively. Most of this code
+lives in [tests/common.ts](./tests/common.ts).
+
+<a name="linting"></a>
+
+### Linting, formatting
 
 Done automatically for you in VSCode with the official Deno extension. If you
 use a different editor, please `deno lint` and `deno fmt` before submitting pull
 requests.
 
-##### VSCode
+<a name="docs"></a>
 
-Make sure you have the official
-[Deno extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
-installed. This includes the language server for super fast typescript, linting,
-formatting, etc.
+### Documentation
 
-#### Other
+We have two kinds of docs. The [explainer docs](./docs/) and
+[API docs](https://jsr.io/@gadicc/yahoo-finance2/doc). The latter are generated
+automatically on publish. However, you can build them locally too if you want to
+check their appearance before commit. `deno task docs:gen` will build the docs
+to a directory called `jsdocs`; `deno task docs:watch` will rebuild the docs on
+file changes (just make sure to reload the commmand if you change the deno.json
+`exports`), and `deno task docs:open` will open your browser to the docs on
+POSIX compliant systems.
 
-We're still writing these docs ahead of the official v3 release. Let us know if
-you need help.
+<a name="commits"></a>
 
-## Version 2 old docs
-
-1. [Local Development](#local-dev)
-1. General Guidelines
-   1. [Editing](#editing)
-   1. [Code](#code)
-1. Testing
-   1. [Devel Mode](#devel-mode)
-1. Specific Guidelines
-   1. [Fixing a bug](#fix-bug)
-   1. [Adding a module](#new-module)
-
-<a name="local-dev"></a>
-
-## Local Development
-
-The following instructions will help you run the latest development release
-locally. If you plan to make changes to the code and submit them back to us (in
-pull requests), please first FORK our repo and clone YOUR FORK instead of the
-URL used below.
-
-1. Install [git](https://git-scm.com/) if you haven't already.
-1. Change to the directory where you want to keep these files.
-1. `git clone https://github.com/gadicc/node-yahoo-finance2.git`
-1. `cd node-yahoo-finance2`
-1. `yarn tsc`
-1. `yarn link`
-
-And now, in any of your own projects where you use `node-yahoo-finance2`:
-
-`yarn link yahoo-finance2`
-
-Now your project will use the latest development version instead of the version
-on npm. You can revert this for your project by typing:
-
-`yarn unlink yahoo-finance2`.
-
-To update your local development copy at any time:
-
-1. `cd node-yahoo-finance2`
-1. `git pull`
-1. `yarn tsc`
-
-## General Guidelines
-
-<a name="editing"></a>
-
-## Editing
-
-**editorconfig**
-
-We have an [`.editorconfig`](./editorconfig) which specifies our requirements
-for indentation, newlines, etc. If you're not sure, please check at
-https://editorconfig.org/ if your editor has built in support for this format or
-if you need to download a plugin (e.g. for
-[Atom](https://atom.io/packages/editorconfig)). Alternatively, just read
-[.editorconfig](./editorconfig) and keep to this on your own.
-
-**prettier**
-
-We use [prettior](https://prettier.io/) to save time and energy otherwise wasted
-on styling and discussion thereof. See their section on
-[editor integrations](https://prettier.io/docs/en/editors.html) if you haven't
-before - we suggest the configuration options to "run prettier on save", but
-"only if a prettierrc exists in the project". Alternatively, just run
-`yarn prettier --write .` before committing your work and submitting your PR.
-
-<a name="">code</a>
-
-## Code
-
-**Default branch: devel**
-
-All PRs should be submitted against the `devel` branch (github default).
-
-**Changing TypeScript Interfaces**
-
-Run `yarn generateSchema` after changing any interfaces, this will regenerate
-the `schema.json` file which is used for run-time tests.
+### Commiting Changes
 
 **Commit Messages**
 
@@ -137,40 +115,16 @@ Angular). This is important as we use
 automate releases and [CHANGELOG](./CHANGELOG.md) entries when we merge back to
 master.
 
+<a name="other"></a>
+
+### Other
+
+We're still writing these docs ahead of the official v3 release. Let us know if
+you need help, or if anything could have been explained better.
+
+## Version 2 to update
+
 ## Testing
-
-<a name="devel-mode"></a>
-
-### Devel Mode
-
-In "devel" mode, any URL will only be fetched _once_ and cached in memory and on
-the disk. All future requests (for the rest of time) will return the cached
-result. This is very helpful to speed up development and is used extensively for
-our tests.
-
-```js
-await search("AAPL", {}, { devel: true }); // uses sha1 from URL
-await search("AAPL", {}, { devel: "search-AAPL.json" }); // fixed filename
-```
-
-Note: `require('yahooFinanceFetchDevel')` is called conditionally when
-`devel: true`. It also uses packages from `devDependencies`. As such, deployment
-to production is not supported.
-
-Note: Even with fixed filename, URLs are verified and fetchDevel will throw if
-they don't match. If you're returning a fake result, name your file
-`.fake.json`.
-
-Occasionally we want to skip caching and only return live results, e.g. to check
-if our validation passes at different times of the day (when different markets
-are open):
-
-```bash
-$ FETCH_DEVEL="nocache" yarn test
-```
-
-**NOTE:** Setting the `devel` option to true will not work in the browser, as it
-requires a filesystem and some modules only available in node.
 
 ## Specific Guidelines
 
@@ -208,5 +162,3 @@ Things to be aware of:
    times of the day to make sure you've covered all cases. If you find something
    that doesn't pass, please add another permanent/cached test for it in the
    spec file.
-
-<a name="new-module"></a> TODO

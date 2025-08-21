@@ -3,13 +3,13 @@ import {
   describe,
   expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
 import { spy } from "@std/testing/mock";
 
 import chart from "./chart.ts";
+import { consoleRestore, consoleSilent } from "../../tests/console.js";
 
 const YahooFinance = createTestYahooFinance({ modules: { chart } });
 const yf = new YahooFinance();
@@ -28,21 +28,28 @@ describe("chart", () => {
     ],
   });
 
-  it.each(symbols)("passes validation for symbol '%s'", async (symbol) => {
-    await yf.chart(
-      symbol,
-      {
-        period1: "2020-01-01",
-        period2: "2020-01-03",
-        return: "object", // native Yahoo return format, first validation step.
-      },
-      {
-        devel: `chart-${symbol}-2020-01-01-to-2020-01-03.json`,
-      },
-    );
-  });
+  it.each(symbols)(
+    "passes validation for symbol '%s'",
+    async (symbol, t, onFinish) => {
+      await yf.chart(
+        symbol,
+        {
+          period1: "2020-01-01",
+          period2: "2020-01-03",
+          return: "object", // native Yahoo return format, first validation step.
+        },
+        {
+          devel: {
+            id: `chart-${symbol}-2020-01-01-to-2020-01-03`,
+            t,
+            onFinish,
+          },
+        },
+      );
+    },
+  );
 
-  it("passes validation if some results are null", async () => {
+  it("passes validation if some results are null", async (t, onFinish) => {
     await yf.chart(
       "WSU.DE",
       {
@@ -51,7 +58,7 @@ describe("chart", () => {
         return: "object", // native Yahoo return format, first validation step.
       },
       {
-        devel: `chart-WSU.DE-2023-08-04-to-2023-08-09.json`,
+        devel: { id: `chart-WSU.DE-2023-08-04-to-2023-08-09`, t, onFinish },
       },
     );
   });
@@ -62,7 +69,7 @@ describe("chart", () => {
     ).rejects.toThrow(/cannot share the same value/);
   });
 
-  it("validates when includePrePost=false interval=1m", async () => {
+  it("validates when includePrePost=false interval=1m", async (t, onFinish) => {
     await yf.chart(
       "AAPL",
       {
@@ -72,14 +79,20 @@ describe("chart", () => {
         includePrePost: false,
       },
       {
-        devel:
-          `chart-AAPL-2025-02-01-to-2025-02-02-includePrePost-false-interval-1m.json`,
+        devel: {
+          // Static because otherwise we get
+          // Error: 1m data not available for startTime=1738368000 and endTime=1738454400. The requested range must be within the last 30 days.
+          id:
+            `chart-AAPL-2025-02-01-to-2025-02-02-includePrePost-false-interval-1m.static`,
+          t,
+          onFinish,
+        },
       },
     );
   });
 
   describe("specific cases", () => {
-    it("optional fields, empty arrays", async () => {
+    it("optional fields, empty arrays", async (t, onFinish) => {
       /*
        * Same day period with 1h interval, this result has these aspects:
        *
@@ -94,7 +107,13 @@ describe("chart", () => {
         // it leads to these kind of results).  Nevertheless, let's be prepared.
         // So the .fake.json result is from query period1=period2="2021-11-23".
         { period1: "2025-01-01", period2: "2025-01-02", interval: "1h" },
-        { devel: "chart-TSLA-2025-01-01-to-2025-01-02-interval-1h.fake.json" },
+        {
+          devel: {
+            id: "chart-TSLA-2025-01-01-to-2025-01-02-interval-1h.fake",
+            t,
+            onFinish,
+          },
+        },
       );
     });
 
@@ -116,24 +135,26 @@ describe("chart", () => {
   });
 
   describe("pre-emptive checks", () => {
-    it("!timestamp, quotes.length !== 1", () => {
+    it("!timestamp, quotes.length !== 1", (t, onFinish) => {
       return expect(
         yf.chart(
           "FAKE",
           { period1: "2021-11-23" },
-          { devel: "chart-notimestamp-quotes-length.fake.json" },
+          {
+            devel: { id: "chart-notimestamp-quotes-length.fake", t, onFinish },
+          },
         ),
       ).rejects.toMatchObject({
         message: /No timestamp with quotes.length !== 1/,
       });
     });
 
-    it("!timestamp, quote != {}", () => {
+    it("!timestamp, quote != {}", (t, onFinish) => {
       return expect(
         yf.chart(
           "FAKE",
           { period1: "2021-11-23" },
-          { devel: "chart-notimestamp-weird-quote.fake.json" },
+          { devel: { id: "chart-notimestamp-weird-quote.fake", t, onFinish } },
         ),
       ).rejects.toMatchObject({
         message: /No timestamp with unexpected quote/,
@@ -141,22 +162,18 @@ describe("chart", () => {
     });
   });
 
-  /* XXX TODO
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on malformed result", () => {
-      return expect(() => {
-        consoleSilent();
-        return yf
-          .chart(
-            "AAPL",
-            { period1: "2020-01-01" },
-            { devel: `weirdJsonResult.fake.json` },
-          )
-          .finally(consoleRestore);
-      }).rejects.toMatchObject({ message: /Unexpected/ });
-    });
-  }
-  */
+  it("throws on malformed result", (t, onFinish) => {
+    return expect((() => {
+      consoleSilent();
+      return yf
+        .chart(
+          "AAPL",
+          { period1: "2020-01-01" },
+          { devel: { id: "weirdJsonResult.fake", t, onFinish } },
+        )
+        .finally(consoleRestore);
+    })()).rejects.toMatchObject({ message: /Unexpected/ });
+  });
 
   describe("query transformWith", () => {
     /*
@@ -189,13 +206,12 @@ describe("chart", () => {
   describe("return type", () => {
     const symbol = "AAPL"; // split 2020-08-31, div 2020-11-06
     const queryOpts = { period1: "2020-08-31", period2: "2020-11-07" };
-    const fetchOpts = { devel: "chart-AAPL-2020-08-31-to-2020-11-07.json" };
-
-    it("array (not specified, as default)", async () => {
+    const id = "chart-AAPL-2020-08-31-to-2020-11-07";
+    it("array (not specified, as default)", async (t, onFinish) => {
       const result = await yf.chart(
         symbol,
         { ...queryOpts /* default, i.e. return: "array" */ },
-        fetchOpts,
+        { devel: { id, t, onFinish } },
       );
 
       // More comprehensive tests below.
@@ -203,11 +219,11 @@ describe("chart", () => {
       expect(result.timestamp).not.toBeDefined();
     });
 
-    it("array", async () => {
+    it("array", async (t, onFinish) => {
       const result = await yf.chart(
         symbol,
         { ...queryOpts, return: "array" },
-        fetchOpts,
+        { devel: { id, t, onFinish } },
       );
 
       // @ts-expect-error: we're testing for mistakes.
@@ -227,11 +243,11 @@ describe("chart", () => {
       expect(result.events!.splits![0].numerator).toBeType("number");
     });
 
-    it("object", async () => {
+    it("object", async (t, onFinish) => {
       const result = await yf.chart(
         symbol,
         { ...queryOpts, return: "object" },
-        fetchOpts,
+        { devel: { id, t, onFinish } },
       );
 
       expect(result.timestamp).toBeType("array");

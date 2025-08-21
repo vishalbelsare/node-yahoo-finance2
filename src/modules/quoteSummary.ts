@@ -1,3 +1,48 @@
+/**
+ * Quote Summary module for retrieving comprehensive financial data.
+ *
+ * This module provides detailed financial information for symbols including
+ * price data, company profile, financial statements, recommendations, and more.
+ * It's modular - you can request only the specific data modules you need.
+ *
+ * @example Basic Usage
+ * ```typescript
+ * import YahooFinance from "yahoo-finance2";
+ * const yahooFinance = new YahooFinance();
+ *
+ * // Default modules: price + summaryDetail
+ * const result = await yahooFinance.quoteSummary('AAPL');
+ * console.log(result.price?.regularMarketPrice);
+ * console.log(result.summaryDetail?.marketCap);
+ *
+ * // Request specific modules
+ * const profile = await yahooFinance.quoteSummary('AAPL', {
+ *   modules: ['summaryProfile', 'financialData']
+ * });
+ * console.log(profile.summaryProfile?.longBusinessSummary);
+ *
+ * // Get all available modules
+ * const comprehensive = await yahooFinance.quoteSummary('AAPL', {
+ *   modules: 'all'
+ * });
+ * ```
+ *
+ * ### Available Modules
+ *
+ * See {@linkcode quoteSummary_modules} for the full list.
+ *
+ * ### Notes
+ * * In the original **node-yahoo-finance v1**, this was incorrectly called "quote".
+ *   The actual quote data is now in the {@linkcode [modules/quote] quote} module.
+ *   This module provides much more comprehensive data than basic quotes.
+ *
+ * * **Performance**: requesting fewer modules improves response time.
+ * Only request the modules you actually need.
+
+ *
+ * @module quoteSummary
+ */
+
 import type { QuoteSummaryResult } from "./quoteSummary-iface.ts";
 
 import type {
@@ -18,6 +63,20 @@ import resultsSchema from "./quoteSummary-iface.schema.json" with {
 const optsDefinitions = getTypedDefinitions(optsSchema);
 const resultsDefinitions = getTypedDefinitions(resultsSchema);
 
+/**
+ * Available quote summary modules for requesting specific data.
+ *
+ * Each module provides different types of financial data:
+ * - **Company Info**: `assetProfile`, `summaryProfile`, `quoteType`
+ * - **Price Data**: `price`, `summaryDetail`
+ * - **Financial Statements**: `incomeStatementHistory*`, `balanceSheetHistory*`, `cashflowStatementHistory*`
+ * - **Analysis**: `recommendationTrend`, `upgradeDowngradeHistory`, `earnings*`
+ * - **Ownership**: `institutionOwnership`, `fundOwnership`, `majorHoldersBreakdown`
+ * - **Fund Specific**: `fundProfile`, `fundPerformance`, `topHoldings`
+ * - **Other**: `calendarEvents`, `defaultKeyStatistics`, `financialData`
+ *
+ * Modules ending with "*" have both regular and quarterly versions.
+ */
 export const quoteSummary_modules = [
   "assetProfile",
   "balanceSheetHistory",
@@ -54,6 +113,10 @@ export const quoteSummary_modules = [
   "upgradeDowngradeHistory",
 ];
 
+/**
+ * Type union of all available quote summary module names.
+ * Use this to specify which modules to include in your request.
+ */
 export type QuoteSummaryModules =
   | "assetProfile"
   | "balanceSheetHistory"
@@ -89,8 +152,23 @@ export type QuoteSummaryModules =
   | "topHoldings"
   | "upgradeDowngradeHistory";
 
+/**
+ * Configuration options for quote summary requests.
+ */
 export interface QuoteSummaryOptions {
+  /**
+   * Whether to return formatted strings instead of raw numbers.
+   * When true, numbers like 1000000 become "1.00M".
+   * @defaultValue false
+   */
   formatted?: boolean;
+
+  /**
+   * Which data modules to include in the response.
+   * - Array of specific module names for targeted data
+   * - "all" to get all available modules
+   * @defaultValue ["price", "summaryDetail"]
+   */
   modules?: Array<QuoteSummaryModules> | "all";
 }
 
@@ -99,6 +177,17 @@ const queryOptionsDefaults = {
   modules: ["price", "summaryDetail"],
 };
 
+/**
+ * Get comprehensive quote summary data with validation enabled.
+ *
+ * **See the {@link [modules/quoteSummary] quoteSummary module} docs for examples and more.**
+ * @see {@link [modules/quoteSummary] quoteSummary module} docs for examples and more.
+ *
+ * @param symbol - Stock symbol to get data for
+ * @param queryOptionsOverrides - Optional configuration for modules and formatting
+ * @param moduleOptions - Optional module configuration
+ * @returns Promise resolving to validated QuoteSummaryResult
+ */
 export default function quoteSummary(
   this: ModuleThis,
   symbol: string,
@@ -106,6 +195,17 @@ export default function quoteSummary(
   moduleOptions?: ModuleOptionsWithValidateTrue,
 ): Promise<QuoteSummaryResult>;
 
+/**
+ * Get comprehensive quote summary data with validation disabled.
+ *
+ * **See the {@link [modules/quoteSummary] quoteSummary module} docs for examples and more.**
+ * @see {@link [modules/quoteSummary] quoteSummary module} docs for examples and more.
+ *
+ * @param symbol - Stock symbol to get data for
+ * @param queryOptionsOverrides - Optional configuration for modules and formatting
+ * @param moduleOptions - Module configuration with validateResult: false
+ * @returns Promise resolving to unvalidated raw data, but resembling {@linkcode QuoteSummaryResult}.
+ */
 export default function quoteSummary(
   this: ModuleThis,
   symbol: string,
@@ -113,6 +213,27 @@ export default function quoteSummary(
   moduleOptions?: ModuleOptionsWithValidateFalse,
 ): Promise<unknown>;
 
+/**
+ * @param symbol - Stock, ETF, mutual fund, or other financial instrument symbol.
+ *                 Use search() to find valid symbols.
+ * @param queryOptionsOverrides - Optional configuration:
+ *                                - `modules`: Specific data modules to request
+ *                                - `formatted`: Return formatted strings vs raw numbers
+ * @param moduleOptions - Optional module configuration (validateResult, etc.)
+ *
+ * @returns Promise that resolves to a QuoteSummaryResult object containing
+ *          the requested modules as properties. Properties will be undefined
+ *          if the module wasn't requested or isn't available for the symbol.
+ *
+ * @throws Will throw an error if:
+ *         - Network request fails
+ *         - Invalid symbol
+ *         - Validation fails (if enabled)
+ *
+ * @see {@link QuoteSummaryOptions} for all available options
+ * @see {@link QuoteSummaryResult} for result structure
+ * @see {@link quoteSummary_modules} for list of all available modules
+ */
 export default function quoteSummary(
   this: ModuleThis,
   symbol: string,

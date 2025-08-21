@@ -3,7 +3,6 @@ import {
   describe,
   expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
@@ -28,43 +27,44 @@ describe("options", () => {
     ],
   });
 
-  it.each(symbols)("passes validation for symbol '%s'", async (symbol) => {
-    await yf.options(symbol, undefined, {
-      devel: `options-${symbol}.json`,
-    });
-  });
+  it.each(symbols)(
+    "passes validation for symbol '%s'",
+    async (symbol, t, onFinish) => {
+      const devel = { id: `options-${symbol}`, t, onFinish };
+      await yf.options(symbol, undefined, { devel });
+    },
+  );
 
-  /* TODO
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on weird result", () => {
-      const devel = "weirdJsonResult.fake.json";
-      return expect(yf.options("A", {}, { devel })).rejects.toThrow(
-        /^Unexpected result/,
-      );
-    });
-  }
-  */
+  it("throws on weird result", (t, onFinish) => {
+    const devel = { id: "weirdJsonResult.fake", t, onFinish };
+    return expect(yf.options("A", {}, { devel })).rejects.toThrow(
+      /^Unexpected result/,
+    );
+  });
 
   describe("date queryOpt should accept `date` as Date, number, string`", () => {
     // NB: fetchDevel will confirm that all options below map to same request params.
     // (because we re-use same devel filename)
-    const devel = { devel: "options-AAPL-expire-2022-03-01.json" };
+    const id = "options-AAPL-expire-2022-03-01";
 
-    it("accepts a Date", () => {
+    it("accepts a Date", (t, onFinish) => {
+      const modOpts = { devel: { id, t, onFinish } };
       return expect(
-        yf.options("AAPL", { date: new Date("2022-03-01") }, devel),
+        yf.options("AAPL", { date: new Date("2022-03-01") }, modOpts),
       ).resolves.not.toThrow();
     });
 
-    it("accepts a number", () => {
+    it("accepts a number", (t, onFinish) => {
+      const modOpts = { devel: { id, t, onFinish } };
       return expect(
-        yf.options("AAPL", { date: 1646092800 /* 2022-03-01 */ }, devel),
+        yf.options("AAPL", { date: 1646092800 /* 2022-03-01 */ }, modOpts),
       ).resolves.not.toThrow();
     });
 
-    it("accepts a string", () => {
+    it("accepts a string", (t, onFinish) => {
+      const modOpts = { devel: { id, t, onFinish } };
       return expect(
-        yf.options("AAPL", { date: "2022-03-01T00:00:00.000Z" }, devel),
+        yf.options("AAPL", { date: "2022-03-01T00:00:00.000Z" }, modOpts),
       ).resolves.not.toThrow();
     });
 

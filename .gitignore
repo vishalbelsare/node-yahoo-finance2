@@ -1,7 +1,7 @@
 /node_modules
 /coverage
-/dist
 /api
+/jsdocs
 
 # HAR (HTTP Archive) file format
 *.har

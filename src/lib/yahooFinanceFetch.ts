@@ -73,7 +73,7 @@ async function yahooFinanceFetch(
   moduleOpts: YahooFinanceFetchModuleOptions = {},
   func = "json",
   needsCrumb = false,
-) {
+): Promise<unknown> {
   if (!(this && this._env)) {
     throw new errors.NoEnvironmentError(
       "yahooFinanceFetch called without this._env set",

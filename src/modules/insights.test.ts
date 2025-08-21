@@ -1,9 +1,8 @@
 import {
   createTestYahooFinance,
   describe,
-  // expect,
+  expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
@@ -25,20 +24,23 @@ describe("insights", () => {
     ],
   });
 
-  it.each(symbols)("passes validation for symbol '%s'", async (symbol) => {
-    await yf.insights(symbol, undefined, {
-      devel: `insights-${symbol}.json`,
-    });
-  });
+  it.each(symbols)(
+    "passes validation for symbol '%s'",
+    async (symbol, t, onFinish) => {
+      await yf.insights(symbol, undefined, {
+        devel: {
+          id: `insights-${symbol}`,
+          t,
+          onFinish,
+        },
+      });
+    },
+  );
 
-  /* XXX TODO
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on weird result", () => {
-      const devel = "weirdJsonResult.fake.json";
-      return expect(yf.insights("A", {}, { devel })).rejects.toThrow(
-        /^Unexpected result/,
-      );
-    });
-  }
-  */
+  it("throws on weird result", (t, onFinish) => {
+    const devel = { id: "weirdJsonResult.fake", t, onFinish };
+    return expect(yf.insights("A", {}, { devel })).rejects.toThrow(
+      /^Unexpected result/,
+    );
+  });
 });

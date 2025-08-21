@@ -3,7 +3,6 @@ import {
   describe,
   expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
 } from "../../tests/common.ts";
 import { spy } from "@std/testing/mock";
@@ -34,9 +33,10 @@ describe("moduleExec", () => {
       period2: new Date("2022-02-23"),
     };
 
-    it("accepts a string", async () => {
+    it("accepts a string", async (t, onFinish) => {
+      const devel = { id: "chart-AAPL", t, onFinish };
       await expect(
-        yf.chart("AAPL", periodOpts, { devel: "chart-AAPL.json" }),
+        yf.chart("AAPL", periodOpts, { devel }),
       ).resolves.toBeDefined();
     });
 
@@ -54,19 +54,23 @@ describe("moduleExec", () => {
       await expect(rwo({ invalid: true })).rejects.toThrow(InvalidOptionsError);
     });
 
-    it("does not throw InvalidOptions on invalid options with validateOptions = false", async () => {
-      // deno-lint-ignore no-explicit-any
-      const rwo = (options: any) =>
-        yf.search("symbol", options, {
-          validateOptions: false,
-          devel: "search-invalid-opts.json",
-        });
-      await expect(rwo({ invalid: true })).resolves.toBeDefined();
-    });
+    it(
+      "does not throw InvalidOptions on invalid options with validateOptions = false",
+      async (t, onFinish) => {
+        // deno-lint-ignore no-explicit-any
+        const rwo = (options: any) =>
+          yf.search("symbol", options, {
+            validateOptions: false,
+            devel: { id: "search-invalid-opts", t, onFinish },
+          });
+        await expect(rwo({ invalid: true })).resolves.toBeDefined();
+      },
+    );
 
-    it("accepts empty queryOptions", async () => {
+    it("accepts empty queryOptions", async (t, onFinish) => {
+      const devel = { id: "search-AAPL", t, onFinish };
       await expect(
-        yf.search("AAPL", undefined, { devel: "search-AAPL.json" }),
+        yf.search("AAPL", undefined, { devel }),
       ).resolves.toBeDefined();
     });
 
@@ -104,14 +108,16 @@ describe("moduleExec", () => {
   });
 
   describe("result validation", () => {
-    if (PERFORM_FAKE_TESTS) {
-      it("throws on unexpected input", async () => {
-        await expect(
-          yf.search("AAPL", {}, { devel: "search-badResult.fake.json" }),
-        ).rejects.toThrow(/Failed Yahoo Schema/);
-      });
+    it("throws on unexpected input", async (t, onFinish) => {
+      const devel = { id: "search-badResult.fake", t, onFinish };
+      await expect(
+        yf.search("AAPL", {}, { devel }),
+      ).rejects.toThrow(/Failed Yahoo Schema/);
+    });
 
-      it("dont throw or log on unexpected input with {validateResult: false}", async () => {
+    it(
+      "dont throw or log on unexpected input with {validateResult: false}",
+      async (t, onFinish) => {
         const logger = createNewLogger();
         const yf = new YahooFinance({
           logger,
@@ -122,7 +128,7 @@ describe("moduleExec", () => {
             "AAPL",
             {},
             {
-              devel: "search-badResult.fake.json",
+              devel: { id: "search-badResult.fake", t, onFinish },
               validateResult: false,
             },
           ),
@@ -135,7 +141,7 @@ describe("moduleExec", () => {
           logger.info.calls.length + logger.error.calls.length +
             logger.dir.calls.length,
         ).toBe(0);
-      });
-    }
+      },
+    );
   });
 });

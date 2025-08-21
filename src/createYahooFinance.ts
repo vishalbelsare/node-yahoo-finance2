@@ -1,8 +1,43 @@
-import defaultOptions, { type YahooFinanceOptions } from "./lib/options.ts";
+/**
+ * @module createYahooFinance
+ */
+import defaultOptions from "./lib/options.ts";
+import type {
+  YahooFinanceOptions,
+  YahooFinanceOptionsJSON,
+} from "./lib/options.ts";
 import yahooFinanceFetch from "./lib/yahooFinanceFetch.ts";
 import moduleExec from "./lib/moduleExec.ts";
 import Notices from "./lib/notices.ts";
+import { assertSupported } from "./lib/runtime-detect.ts";
 
+const MIN_SUPPORTED_RUNTIMES: Parameters<typeof assertSupported>[0] = {
+  node: "22.0.0",
+  deno: "2.0.0",
+  bun: "1.0.0",
+  cloudflare: {
+    requireFeatures: [],
+  },
+};
+
+/**
+ * Instantiate a new YahooFinance client.
+ *
+ * See {@linkcode YahooFinanceOptions} for available options.
+ *
+ * @example
+ * ```ts
+ * const yahooFinance = new YahooFinance();
+ * console.log(await yahooFinance.quote("AAPL"));
+ * ```
+ *
+ * Internal / private properties (prefixed `_`) and shown below are not part of the public API and should not be depended on.
+ * You're welcome to inspect or make use of them but they might change or disappear without notice.
+ *
+ * @see The full list of {@link [modules] main modules} and {@link [other] other modules}.
+ * @see {@linkcode [createYahooFinance].createYahooFinance createYahooFinance} for creating an API client with custom modules (advanced use-cases only).
+ * @see The {@link ../../~/default.html | default} entry point that includes all modules.
+ */
 export class YahooFinance {
   _opts: YahooFinanceOptions;
   _fetch: typeof yahooFinanceFetch;
@@ -23,32 +58,6 @@ export class YahooFinance {
     this._env = {
       URLSearchParams,
       fetch: null,
-      fetchDevel: () => {
-        // @ts-expect-error: later
-        const fetchCache = this.fetchCache;
-        if (!fetchCache) {
-          throw new Error("`fetchDevel()` called, but `fetchCache` not set");
-        }
-
-        function fetchDevel(
-          input: Parameters<typeof fetch>[0],
-          init?: Parameters<typeof fetch>[1], // & { devel?: boolean | string },
-        ): ReturnType<typeof fetch> {
-          // @ts-expect-error: later
-          const { devel, ..._init } = init || {};
-          // console.log({ devel });
-          if (typeof devel === "string") {
-            fetchCache._once({ id: devel.replace(/\.json$/, "") });
-          } else {
-            throw new Error(
-              "unexpected fetchDevel value: " + JSON.stringify(devel),
-            );
-          }
-
-          return fetch(input, init);
-        }
-        return fetchDevel;
-      },
     };
 
     if ("_createOpts" in this) {
@@ -62,6 +71,10 @@ export class YahooFinance {
       if ("_allowAdditionalProps" in createOpts) {
         if (!this._opts.validation) this._opts.validation = {};
         this._opts.validation.allowAdditionalProps = false;
+      }
+      if ("fetchDevel" in createOpts) {
+        // @ts-expect-error: later
+        this._env.fetchDevel = createOpts.fetchDevel;
       }
     } else {
       /// XXX TODO mergeoptions from setGlobalConfig
@@ -80,6 +93,19 @@ export class YahooFinance {
       // deno-lint-ignore no-explicit-any
       : (obj: any) => this._opts.logger!.info(JSON.stringify(obj, null, 2));
     // deno-coverage-ignore-stop
+
+    try {
+      assertSupported(MIN_SUPPORTED_RUNTIMES);
+    } catch (error) {
+      const warning = ". Things might break or work unexpectedly!";
+      if (error instanceof Error) {
+        this._opts.logger!.warn("[yahoo-finance2] " + error.message + warning);
+      } else {
+        this._opts.logger!.warn(
+          "[yahoo-finance2] " + JSON.stringify(error) + warning,
+        );
+      }
+    }
   }
 }
 
@@ -87,11 +113,13 @@ export class YahooFinance {
 type ModuleMethod = (...args: any[]) => any;
 
 interface CreateYahooFinanceOptions {
+  /** The modules (`quote`, `search`, etc) to include in this YahooFinance class */
   modules: Record<string, ModuleMethod>;
+  /** The default options to use for new instances */
   _opts?: YahooFinanceOptions;
 }
 
-type YahooFinanceWithModules<T extends CreateYahooFinanceOptions> =
+export type YahooFinanceWithModules<T extends CreateYahooFinanceOptions> =
   & {
     new (options?: YahooFinanceOptions):
       & YahooFinance
@@ -103,6 +131,30 @@ type YahooFinanceWithModules<T extends CreateYahooFinanceOptions> =
     [K in keyof T["modules"]]: T["modules"][K];
   };
 
+export type { YahooFinanceOptions, YahooFinanceOptionsJSON };
+
+/**
+ * Create a new YahooFinance **class** with the given options (usually a list of modules,
+ * or special options useful for testing).
+ *
+ * @example Basic Example
+ * ```ts
+ * import quote from "yahoo-finance2/modules/quote.ts";
+ * import search from "yahoo-finance2/modules/search.ts";
+ *
+ * // Create a YahooFinance instance with the quote and search modules only.
+ * const yahooFinance = createYahooFinance({
+ *   modules: { quote, search }
+ * });
+ * ```
+ *
+ * By using only the modules you need, you'll have a small bundle size.  But remember,
+ * `yahoo-finance2` is never bundled to the client (browser), so your savings will be
+ * will be marginal (e.g. a marginally faster serverless cold start time).
+ *
+ * @param createOpts The {@link CreateYahooFinanceOptions} that influence the class creation.
+ * @returns A {@link YahooFinance} class that you can call with `new YahooFinance()`.
+ */
 export default function createYahooFinance<T extends CreateYahooFinanceOptions>(
   createOpts: T,
 ): YahooFinanceWithModules<T> {

@@ -5,6 +5,7 @@ import validateAndCoerce from "./validate/index.ts";
 import { repository } from "../consts.ts";
 import type { JSONSchema, ValidationError } from "./validate/index.ts";
 import type { Logger } from "./options.ts";
+import { versionCheck } from "./versions.ts";
 
 export function resolvePath(
   obj: Record<string, unknown>,
@@ -244,12 +245,8 @@ function validate({
       logObj(errors, { depth: 5 });
       // logObj(object);
       logger.info(`
-This may happen intermittently and you should catch errors appropriately.
-However:  1) if this recently started happening on every request for a symbol
-that used to work, Yahoo may have changed their API.  2) If this happens on
-every request for a symbol you've never used before, but not for other
-symbols, you've found an edge-case (OR, we may just be protecting you from
-"bad" data sometimes stored for e.g. misspelt symbols on Yahoo's side).
+This may happen intermittently and you should catch errors appropriately.  However:  1) if this recently started happening on every request for a symbol that used to work, Yahoo may have changed their API.  2) If this happens on every request for a symbol you've never used before, but not for other symbols, you've found an edge-case (OR, we may just be protecting you from "bad" data sometimes stored for e.g. misspelt symbols on Yahoo's side).
+
 Please see if anyone has reported this previously:
 
   ${repository}/issues?q=is%3Aissue+${title}
@@ -258,15 +255,19 @@ or open a new issue (and mention the symbol):  ${pkg.name} v${pkg.version}
 
   ${repository}/issues/new?labels=bug%2C+validation&template=validation.md&title=${title}
 
-For information on how to turn off the above logging or skip these errors,
-see https://github.com/gadicc/node-yahoo-finance2/tree/devel/docs/validation.md.
+For information on how to turn off the above logging or skip these errors, see https://github.com/gadicc/node-yahoo-finance2/tree/devel/docs/validation.md.
 
-At the end of the doc, there's also a section on how to
-[Help Fix Validation Errors](https://github.com/gadicc/node-yahoo-finance2/blob/devel/docs/validation.md#help-fix)
-in case you'd like to contribute to the project.  Most of the time, these
-fixes are very quick and easy; it's just hard for our small core team to keep up,
-so help is always appreciated!
+At the end of the doc, there's also a section on how to "Help Fix Validation Errors" in case you'd like to contribute to the project.  Most of the time, these fixes are very quick and easy; it's just hard for our small core team to keep up, so help is always appreciated!
 `);
+      versionCheck().then((result) => {
+        if (!result.isLatest) {
+          logger.info(
+            `Additionally, your yahoo-finance2 version out of date: ${result.current} < ${result.latest} (latest)`,
+          );
+        }
+      }).catch((error) => {
+        logger.error(`Failed to check version: ${error.message}`);
+      });
     } /* if (logErrors) */
 
     throw new FailedYahooValidationError("Failed Yahoo Schema validation", {

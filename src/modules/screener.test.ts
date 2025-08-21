@@ -1,8 +1,8 @@
 import {
   createTestYahooFinance,
   describe,
+  expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
 } from "../../tests/common.ts";
 import screener from "./screener.ts";
@@ -21,11 +21,11 @@ describe("screener", () => {
     "day_losers",
   ])(
     "passes validation for predefined screener '%s'",
-    async (predefined_screener) => {
+    async (predefined_screener, t, onFinish) => {
       await yf.screener(
         { scrIds: predefined_screener },
         {
-          devel: `screener-${predefined_screener}.json`,
+          devel: { id: `screener-${predefined_screener}`, t, onFinish },
         },
       );
     },
@@ -34,24 +34,20 @@ describe("screener", () => {
   // Test for using just the screener name as an argument w/o options obj
   it.each(["aggressive_small_caps"])(
     "passes validation for predefined screener '%s'",
-    async (predefined_screener) => {
+    async (predefined_screener, t, onFinish) => {
       await yf.screener(
         predefined_screener,
         {
-          devel: `screener-${predefined_screener}.json`,
+          devel: { id: `screener-${predefined_screener}`, t, onFinish },
         },
       );
     },
   );
 
-  /* TODO
-  if (PERFORM_FAKE_TESTS) {
-    it("throws on weird result", () => {
-      const devel = "weirdJsonResult.fake.json";
-      return expect(
-        yf.screener({ scrIds: "aggressive_small_caps" }, { devel }),
-      ).rejects.toThrow(/^Unexpected result/);
-    });
-  }
-  */
+  it("throws on weird result", (t, onFinish) => {
+    const devel = { id: "weirdJsonResult.fake", t, onFinish };
+    return expect(
+      yf.screener({ scrIds: "aggressive_small_caps" }, { devel }),
+    ).rejects.toThrow(/^Unexpected result/);
+  });
 });

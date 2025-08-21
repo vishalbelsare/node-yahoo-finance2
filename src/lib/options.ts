@@ -14,11 +14,29 @@ export interface Logger {
   dir: (...args: any[]) => void;
 }
 
+/**
+ * Non-primitive options for {@linkcode YahooFinance}.
+ *
+ * See {@linkcode YahooFinanceOptionsJSON} for additional primitive options.
+ *
+ * @see {@link YahooFinanceOptionsJSON} for primitive options.
+ */
 export interface YahooFinanceOptions extends YahooFinanceOptionsJSON {
+  /**
+   * By default, we use an in-memory cookie store to re-use Yahoo cookies across requests.
+   * This is usually fine for long running servers, but for example, for serverless / edge
+   * functions, since the initial cookie retrieval takes longer, you can speed up future
+   * requests by providing a custom cookie jar with a database backend.  For the CLI, we
+   * likewise use a filesystem-backed cookie jar for this purpose.  See
+   * {@link ../../lib/cookieJar.ts/~/ExtendedCookieJar.html ExtendedCookieJar} for more details (based on
+   * {@link https://www.npmjs.com/package/tough-cookie|npm:tough-cookie}).
+   */
   cookieJar?: ExtendedCookieJar;
   logger?: Logger;
   fetch?: typeof fetch;
 }
+export type { YahooFinanceOptionsJSON };
+export { ExtendedCookieJar };
 
 const options: YahooFinanceOptions = {
   YF_QUERY_HOST: "query2.finance.yahoo.com",

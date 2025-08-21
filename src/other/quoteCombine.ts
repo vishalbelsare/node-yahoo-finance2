@@ -1,19 +1,68 @@
+/**
+ * Utility function will debounce multiple calls and combine them into a
+ * single {@linkcode [modules/quote] quote} call, i.e. you'll call `quoteCombine()` many times, and
+ * 50ms after the last call, `quote()` will be called once so that only a single
+ * HTTP request is sent to collect the data for all symbols.
+ *
+ * @example
+ * ```ts
+ * import YahooFinance from 'yahoo-finance2';
+ * const yahooFinance = new YahooFinance();
+ *
+ * // Only a single HTTP request will be made for all of these.
+ * databaseResults.forEach(async (row) => {
+ *   const result = await yahooFinance.quoteCombine(row.symbol);
+ *   // do something
+ * });
+ *
+ * // Consider asking only for what you need to save on bandwidth and latency
+ * const fields = [ "regularMarketPrice", "regularMarketTime" ];
+ * const result = await yahooFinance.quoteCombine("TSLA", { fields });
+ * ```
+ *
+ * ### Notes:
+ * - Each `quoteCombine()` call receives the result for only the symbol it asked for.
+ *
+ * - Query options (i.e. `fields`, above) and the shape of the return result are identical to that of quote().
+ *
+ * - If you call `quoteCombine()` multiple times with different {@linkcode QuoteOptions}, `quote()` will be called separately for each unique set of queryOptions and its associated set of symbols.
+ *
+ * - It's fine if your code calls `quoteCombine()` many times for the same symbol. The symbol will be queried only once, and returned many times.
+ *
+ * @module quoteCombine
+ */
+
 import type {
   ModuleOptions,
-  ModuleOptionsWithValidateTrue,
   ModuleOptionsWithValidateFalse,
+  ModuleOptionsWithValidateTrue,
   ModuleThis,
-} from "../lib/moduleCommon.js";
+} from "../lib/moduleCommon.ts";
 
-import type { QuoteOptions, Quote } from "../modules/quote.js";
-import quote from "../modules/quote.js";
+import { getTypedDefinitions } from "../lib/validate/index.ts";
 
-import validateAndCoerceTypes from "../lib/validateAndCoerceTypes.js";
+import type {
+  Quote,
+  QuoteOptions,
+  QuoteOptionsWithReturnArray,
+  QuoteResponseArray,
+} from "../modules/quote.ts";
+import quote from "../modules/quote.ts";
+
+import validateAndCoerceTypes from "../lib/validateAndCoerceTypes.ts";
+
+import schema from "../modules/quote.schema.json" with { type: "json" };
+const definitions = getTypedDefinitions(schema);
 
 const DEBOUNCE_TIME = 50;
 
 const slugMap = new Map();
 
+/**
+ * Debounce multiple calls into a single `quote()` network request.
+ *
+ * @see See the {@link [other/quoteCombine] quoteCombine module} docs for examples and more.
+ */
 export default function quoteCombine(
   this: ModuleThis,
   query: string,
@@ -21,34 +70,59 @@ export default function quoteCombine(
   moduleOptions?: ModuleOptionsWithValidateTrue,
 ): Promise<Quote>;
 
+/**
+ * Debounce multiple calls into a single `quote()` network request.
+ *
+ * @see See the {@link [other/quoteCombine] quoteCombine module} docs for examples and more.
+ */
 export default function quoteCombine(
   this: ModuleThis,
   query: string,
   queryOptionsOverrides?: QuoteOptions,
   moduleOptions?: ModuleOptionsWithValidateFalse,
-): Promise<any>;
+): Promise<unknown>;
 
 export default function quoteCombine(
   this: ModuleThis,
   query: string,
-  queryOptionsOverrides: QuoteOptions = {},
+  _queryOptionsOverrides: QuoteOptions = {},
   moduleOptions?: ModuleOptions,
-): Promise<any> {
+): Promise<unknown> {
   const symbol = query;
 
-  if (typeof symbol !== "string")
+  if (typeof symbol !== "string") {
     throw new Error(
       "quoteCombine expects a string query parameter, received: " +
         JSON.stringify(symbol, null, 2),
     );
+  }
 
-  validateAndCoerceTypes({
-    source: "quoteCombine",
-    type: "options",
-    object: queryOptionsOverrides,
-    schemaKey: "#/definitions/QuoteOptions",
-    options: this._opts.validation,
-  });
+  if (
+    _queryOptionsOverrides.return && _queryOptionsOverrides.return !== "array"
+  ) {
+    throw new Error("Can't specify other return types using quoteCombine()");
+  }
+  const queryOptionsOverrides =
+    _queryOptionsOverrides as QuoteOptionsWithReturnArray;
+
+  const validateOptions = !moduleOptions ||
+    moduleOptions.validateOptions === undefined ||
+    moduleOptions.validateOptions === true;
+
+  try {
+    validateAndCoerceTypes({
+      source: "quoteCombine",
+      type: "options",
+      object: queryOptionsOverrides,
+      definitions,
+      schemaKey: "#/definitions/QuoteOptions",
+      options: this._opts.validation,
+      logger: this._opts.logger,
+      logObj: this._logObj,
+    });
+  } catch (error) {
+    if (validateOptions) throw error;
+  }
 
   // Make sure we only combine requests with same options
   const slug = JSON.stringify(queryOptionsOverrides);
@@ -65,8 +139,6 @@ export default function quoteCombine(
 
   if (entry.timeout) clearTimeout(entry.timeout);
 
-  const thisQuote = quote.bind(this);
-
   return new Promise((resolve, reject) => {
     let symbolPromiseCallbacks = entry.symbols.get(symbol);
     /* istanbul ignore else */
@@ -81,30 +153,38 @@ export default function quoteCombine(
       slugMap.delete(slug);
 
       const symbols: string[] = Array.from(entry.symbols.keys());
-      // @ts-ignore
-      thisQuote(symbols, queryOptionsOverrides, moduleOptions)
-        .then((results) => {
-          for (let result of results) {
-            for (let promise of entry.symbols.get(result.symbol)) {
-              promise.resolve(result);
-              promise.resolved = true;
-            }
-          }
 
-          // Check for symbols we asked for and didn't get back,
-          // e.g. non-existant symbols (#150)
-          for (let [symbol, promises] of entry.symbols) {
-            for (let promise of promises) {
-              if (!promise.resolved) {
-                promise.resolve(undefined);
-              }
+      const thisQuote = quote.bind(this) as (
+        symbols: string[],
+        options?: QuoteOptionsWithReturnArray,
+        moduleOptions?: ModuleOptionsWithValidateTrue,
+      ) => Promise<QuoteResponseArray>;
+
+      thisQuote(symbols, queryOptionsOverrides, {
+        ...moduleOptions,
+        validateResult: true,
+      }).then((results) => {
+        for (const result of results) {
+          for (const promise of entry.symbols.get(result.symbol)) {
+            promise.resolve(result);
+            promise.resolved = true;
+          }
+        }
+
+        // Check for symbols we asked for and didn't get back,
+        // e.g. non-existant symbols (#150)
+        for (const [_symbol, promises] of entry.symbols) {
+          for (const promise of promises) {
+            if (!promise.resolved) {
+              promise.resolve(undefined);
             }
           }
-        })
-        .catch((error) => {
-          for (let symbolPromiseCallbacks of entry.symbols.values())
-            for (let promise of symbolPromiseCallbacks) promise.reject(error);
-        });
+        }
+      }).catch((error) => {
+        for (const symbolPromiseCallbacks of entry.symbols.values()) {
+          for (const promise of symbolPromiseCallbacks) promise.reject(error);
+        }
+      });
     }, DEBOUNCE_TIME);
   });
 }

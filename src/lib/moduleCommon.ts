@@ -5,8 +5,19 @@ export interface ModuleOptions {
   validateOptions?: boolean;
   /** If false, will pass back unvalidated / untyped result from Yahoo  */
   validateResult?: boolean;
-  /** Filename to use for cached result */
-  devel?: boolean | string;
+  /** Controls for http cache
+   *  {
+   *    id: string;           // cache key
+   *    t: Deno.TestContext;  // test context
+   *    onFinish: (cb: (error?: unknown) => void) => void;
+   *  }
+   *  See `tests/common.ts` for how these are used for conditional caching.
+   */
+  devel?: {
+    id: string;
+    t: Deno.TestContext;
+    onFinish: (cb: (error?: unknown) => void) => void;
+  };
   /** An alternative fetch function to use just for this call */
   fetch?: typeof fetch;
   /** Any options to pass to fetch() just for this request. */
@@ -31,3 +42,8 @@ export interface ModuleThis {
   // _moduleExec: typeof ModuleExec;
   // _notices: Notices;
 }
+
+/**
+ * test
+ */
+export type ModuleError = Error;

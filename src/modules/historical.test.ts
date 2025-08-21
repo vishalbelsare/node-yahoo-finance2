@@ -3,7 +3,6 @@ import {
   describe,
   expect,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
@@ -34,16 +33,25 @@ describe("historical", () => {
     ],
   });
 
-  it.each(symbols)("passes validation for symbol '%s'", async (symbol) => {
-    await yf.historical(
-      symbol,
-      {
-        period1: "2020-01-01",
-        period2: "2020-01-03",
-      },
-      { devel: `historical-via-chart-${symbol}-2020-01-01-to-2020-01-03.json` },
-    );
-  });
+  it.each(symbols)(
+    "passes validation for symbol '%s'",
+    async (symbol, t, onFinish) => {
+      await yf.historical(
+        symbol,
+        {
+          period1: "2020-01-01",
+          period2: "2020-01-03",
+        },
+        {
+          devel: {
+            id: `historical-via-chart-${symbol}-2020-01-01-to-2020-01-03`,
+            t,
+            onFinish,
+          },
+        },
+      );
+    },
+  );
 
   it("throws if period1,period2 are the same", async () => {
     await expect(
@@ -64,7 +72,7 @@ describe("historical", () => {
     consoleRestore();
   });
 
-  it("dividends pass validation (#557)", async () => {
+  it("dividends pass validation (#557)", async (t, onFinish) => {
     await yf.historical(
       "MSFT",
       {
@@ -73,13 +81,16 @@ describe("historical", () => {
         events: "dividends",
       },
       {
-        devel:
-          "historical-via-chart-MSFT-dividends-2021-02-01-to-2022-01-31.csv",
+        devel: {
+          id: "historical-via-chart-MSFT-dividends-2021-02-01-to-2022-01-31",
+          t,
+          onFinish,
+        },
       },
     );
   });
 
-  it("splits pass validation (#557)", async () => {
+  it("splits pass validation (#557)", async (t, onFinish) => {
     await yf.historical(
       "NVDA",
       {
@@ -87,7 +98,13 @@ describe("historical", () => {
         period2: "2022-01-31",
         events: "split",
       },
-      { devel: "historical-via-chart-NVDA-split-2021-02-01-to-2022-01-31.csv" },
+      {
+        devel: {
+          id: "historical-via-chart-NVDA-split-2021-02-01-to-2022-01-31",
+          t,
+          onFinish,
+        },
+      },
     );
   });
 
@@ -102,7 +119,7 @@ describe("historical", () => {
    *    "adjclose": null
    * }
    */
-  it("filters out null rows", async () => {
+  it("filters out null rows", async (t, onFinish) => {
     await yf.historical(
       "0P0000XTS7",
       {
@@ -110,7 +127,11 @@ describe("historical", () => {
         period2: "2024-09-16",
       },
       {
-        devel: "historical-via-chart-0P0000XTS7-2024-09-12-to-2024-09-16.json",
+        devel: {
+          id: "historical-via-chart-0P0000XTS7-2024-09-12-to-2024-09-16",
+          t,
+          onFinish,
+        },
       },
     );
   });
@@ -182,17 +203,26 @@ describe("historical", () => {
   }
   */
 
-  it("handles events:dividends for stocks with no dividends (#658)", async () => {
-    await yf.historical(
-      "TSLA", // No dividends at time of writing
-      {
-        period1: 0,
-        period2: "2023-08-12", // time of writing :)
-        events: "dividends",
-        interval: "1d",
-      },
-      { devel: "historical-via-chart-dividends-TSLA-no-dividends.json" },
-    );
-    // Enough to check that this doesn't throw.
-  });
+  it(
+    "handles events:dividends for stocks with no dividends (#658)",
+    async (t, onFinish) => {
+      await yf.historical(
+        "TSLA", // No dividends at time of writing
+        {
+          period1: 0,
+          period2: "2023-08-12", // time of writing :)
+          events: "dividends",
+          interval: "1d",
+        },
+        {
+          devel: {
+            id: "historical-via-chart-dividends-TSLA-no-dividends",
+            t,
+            onFinish,
+          },
+        },
+      );
+      // Enough to check that this doesn't throw.
+    },
+  );
 });

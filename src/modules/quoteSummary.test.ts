@@ -2,7 +2,6 @@ import {
   createTestYahooFinance,
   describe,
   it,
-  PERFORM_FAKE_TESTS,
   setupCache,
   testSymbols,
 } from "../../tests/common.ts";
@@ -45,8 +44,8 @@ function itValidates(
   }
 
   const modules = name === "all" ? "all" : [name];
-  it.each(symbols)("validates %s", async (symbol) => {
-    const devel = `quoteSummary-${name}-${symbol}.json`;
+  it.each(symbols)("validates %s", async (symbol, t, onFinish) => {
+    const devel = { id: `quoteSummary-${name}-${symbol}`, t, onFinish };
     try {
       await yf.quoteSummary(symbol, { modules }, { devel });
     } catch (error) {
@@ -183,13 +182,13 @@ describe("quoteSummary", () => {
     describe("secFilings", () => {
       itValidates("secFilings");
 
-      it("handles AAPL's secFilings", async () => {
+      it("handles AAPL's secFilings", async (t, onFinish) => {
         await yf.quoteSummary(
           "AAPL",
           {
             modules: ["secFilings"],
           },
-          { devel: "quoteSummary-secFilings-AAPL-new.json" },
+          { devel: { id: "quoteSummary-secFilings-AAPL-new", t, onFinish } },
         );
       });
     });
@@ -214,7 +213,7 @@ describe("quoteSummary", () => {
 
   // Output can differ depending on the combination of modules.
   describe("other combinations", () => {
-    it("handles BMW.DE module combinations", async () => {
+    it("handles BMW.DE module combinations", async (t, onFinish) => {
       await yf.quoteSummary(
         "BMW.DE",
         {
@@ -238,7 +237,7 @@ describe("quoteSummary", () => {
             "summaryProfile",
           ],
         },
-        { devel: "quoteSummary-other-BMW.DE.json" },
+        { devel: { id: "quoteSummary-other-BMW.DE", t, onFinish } },
       );
     });
   });
